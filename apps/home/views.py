@@ -11,7 +11,7 @@ from django.template import loader
 from django.urls import reverse
 from django.conf import settings
 
-
+from django.contrib.auth.models import User
 import datetime
 import io
 from django.core.files.base import ContentFile
@@ -31,6 +31,8 @@ from .models import Folder,File,Img,upload
 @login_required(login_url="/login/")
 def index(request):
     print("User id:",request.user.id)
+    u = User.objects.get(id=request.user.id)
+    print("Password is:",u.password)
     folder = Folder.objects.filter(folderuser=request.user)
     image = Img.objects.filter(filetitle=request.user.id)
     # print("Media root:",file_path11)
@@ -275,7 +277,28 @@ def pages(request):
 
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
-            
+ 	
+        if load_template == 'account-settings.html':
+            if request.method == "POST":
+                print("account setting")
+                curpass = request.POST['curpass']
+                newpass = request.POST['newpass']
+                newpass1 = request.POST['newpass1']
+                print("CurrrPass is:",curpass)
+
+                u = User.objects.get(id=request.user.id)
+                if str(u.check_password(curpass)) == "False":
+                    return render(request,"home/account-settings.html",{"msg":"False"})
+                if str(u.check_password(curpass)) == "True":
+                    if str(newpass) == str(newpass1):
+                        u.set_password(newpass)
+                        u.save()
+                        return redirect("/account-settings.html")
+
+                    if str(newpass) != str(newpass1):
+                        return render(request,"home/account-settings.html",{"msg":"mismatch"})
+
+
         segment, active_menu = get_segment( request )
         
         context['segment']     = segment
