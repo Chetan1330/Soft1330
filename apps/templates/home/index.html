@@ -1,0 +1,333 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+
+  
+  #file-chosen{
+    margin-left: 0.3rem;
+    font-family: sans-serif;
+  }
+
+  .navbar-vertical .navbar-nav > .nav-item .nav-link.active .icon {
+    background-image: linear-gradient(310deg, #82d616 0%, #82d616 100%);
+  }
+
+  
+</style>
+
+{% endblock stylesheets %}
+
+{% block body_class %} g-sidenav-show bg-gray-100 {% endblock %}
+
+{% block content %}
+
+<div style="display: flex; padding: 10px 20px; justify-content: space-between">
+  <div class="col-12">
+    <div class="row">
+      <!-- <img class="img-radius" width="10" height="10" style="border-radius: 50%; float: left; margin-right: 10px;" src="{{image}}" alt="User image"> -->
+      
+      <div class="col-6">
+        <button
+      type="button"
+      onclick="clrhome()"
+      class="btn bg-gradient-success"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      
+    >
+      New Project
+    </button>
+      </div>
+    </div>
+    <div class="col-12 py-3 row">
+      
+      
+      <div id="pcoded-inner-navbar" class=" row">
+        <!--  -->
+        {% for i in folder %}
+        <div style="margin-left: 10px;" class="col-sm-3">
+          <div class="card" style="margin-top: 5px; width: 16rem; height: 10rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{i.foldername}}</h5>
+              <p class="card-text">{{i.folderdesc}}</p>
+              <a href="{% url 'folder' i.id %}" class="btn bg-gradient-success"
+                >Go Folder
+              </a>
+              <a style="margin-left: 30px;" href="{% url 'delete' i.id %}" class="btn-outline-danger" title="Delete">
+                <i class="fa fa-2x fa-trash"></i>
+            </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!--  -->
+      </div>
+    </div>
+  </div>
+  
+  <div class="">
+    <!-- Button trigger modal -->
+    
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="row">
+            <div class="col-lg-12 col-12 mx-auto">
+              <div class="card card-body mt-4">
+                <form action="{% url 'addfolder' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                <h6 class="mb-0">New Project</h6>
+                <p class="text-sm mb-0">Create new project</p>
+                <hr class="horizontal dark my-3">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input type="text" class="form-control" name="foldername" id="projectName" required>
+                <label class="mt-4">Project Description</label>
+                
+                <input type="text" class="form-control" name="desc" required>
+                
+                <label class="mt-4 form-label">Input Files</label>
+                  
+                  
+                    <div class="form-control">
+                      <input name="file" type="file" id="actual-btn" hidden multiple required/>
+                      
+                      <label class="btn bg-gradient-success m-0 ms-2" for="actual-btn">Choose File</label>
+                      <!-- name of file chosen -->
+                      
+                      <span id="file-chosen">Select files</span>
+                      
+                      <!-- <output id="ctable">dsfdsf</output> -->
+                      <p style="margin-left: 10px; margin-top: 5px;" id="fp"></p>
+                      <!-- <div class="fallback" id="ctable">
+                        
+                      </div> -->
+                      
+                      
+                    </div>
+                    
+                
+                <div class="d-flex justify-content-end mt-4">
+                  <button type="button" name="button" class="btn btn-light m-0"><a href="/">Cancel</a></button>
+                  <button id="submitbtn" type="submit" name="button" class="btn bg-gradient-success m-0 ms-2">Create Project</button>
+                </div>
+                
+                
+            </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %} 
+
+  <script src="/static/assets/js/plugins/choices.min.js"></script>
+  <script src="/static/assets/js/plugins/quill.min.js"></script>
+  <script src="/static/assets/js/plugins/flatpickr.min.js"></script>
+  <script src="/static/assets/js/plugins/dropzone.min.js"></script>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+
+    const actualBtn = document.getElementById('actual-btn');
+    const home = document.getElementById('home');
+    const homeico = document.getElementById('homeico');
+    const newbtn = document.getElementById('newbtn');
+    const fileChosen = document.getElementById('file-chosen');
+
+
+    $("#m-search").on("keyup",function(){
+      var e=$(this).val().toLowerCase(),s=$(this).val().length;
+      console.log(e)
+      $("#pcoded-inner-navbar > .col-sm > .card > .card-body > .card-title").each(function(){
+        // console.log(this)
+        var d=$(this).text();
+        var s=$(this).text().toLowerCase();
+        // console.log("Parent:",$(this).parent().parent().parent().parent())
+      if(d)var i=d.toLowerCase();
+      if(i){-1!==i.indexOf(e)?$(this).parent().parent().parent().show():$(this).parent().parent().parent().hide(),s>0?$("#pcoded-inner-navbar").hide():$("#pcoded-inner-navbar").show()}})})
+    // document.getElementById('#exampleModal').on('hidden', function () {
+    //     // do something…
+    //     console.log("Closed")
+    // })
+    // $(document).ready(function(){
+    //   $("#exampleModal").modal("show");
+        
+    //   $("#myBtn").click(function(){
+    //     $("#exampleModal").modal("hide");
+    //   });
+      
+    //   $("#exampleModal").on('hide.bs.modal', function(){
+    //     alert('The modal is about to be hidden.');
+    //   });
+    // });
+
+    $("#exampleModal").on('hide.bs.modal', function(){
+        // alert('The modal is about to be hidden.');
+        var success_url = "{% url 'index' %}"
+        // Redirect to URL
+        window.location.replace(success_url)
+      });
+
+    actualBtn.addEventListener('change', function(){
+      var valam = parseInt(0)
+      var valpm = parseInt(0)
+      document.getElementById('file-chosen').style.display = "none"
+      for (var i = 0; i < this.files.length; ++i) {
+        //console.log(this.files[i].name)
+
+        if (this.files[i].name.includes("AM_report")){
+          //console.log("YES")
+          valam++
+        }
+
+        if (this.files[i].name.includes("PM_report")){
+          //console.log("YES")
+          valpm++
+        }
+        //alert(this.files[i].name.substring("AM"))
+        var allowedExtensions =
+                    /(\.txt)$/i;
+
+        if (!allowedExtensions.exec(this.files[i].name)) {
+                alert('Invalid file type');
+                document.getElementById('submitbtn').style.display = "none"
+                fileInput.value = '';
+                return false;
+            }
+        else{
+          document.getElementById('submitbtn').style.display = "block"
+        }
+        //children += '<li>' + input.files.item(i).name + '</li>';
+      }
+      //console.log(valam)
+      //console.log(valpm)
+
+      if (valam == valpm){
+        document.getElementById('submitbtn').disabled = false;
+      }
+      if (valam != valpm){
+        document.getElementById('submitbtn').disabled = true;
+      }
+
+      // if(this.files.length = 1){
+      //   fileChosen.textContent = this.files[0].name
+      // }
+      if(this.files.length > 1){
+        document.getElementById('fp').innerHTML =
+                'Total Files: <b>' + this.files.length + '</b></br >';
+        // var variable = this.files
+        // document.write(variable)
+        for (var i = 0; i < this.files.length; ++i){
+
+          document.getElementById('fp').innerHTML = document.getElementById('fp').innerHTML + '<br /> ' + this.files[i].name + ' (<b>' + this.files[i].size + '</b> bytes)';
+          // fileChosen.textContent = this.files[i].name
+          // document.getElementById('ctable').innerHTML = `<tr><td>${this.files[i].name}</td></tr>`;
+          // document.getElementById('ctable').append(`${i+1}.${this.files[i].name}...`);
+          // console.log(this.files[i].name)
+          // document.getElementById('ctable').innerHTML = `<div class="table-responsive">
+          //       <table class="table align-items-center mb-0">
+          //         <tbody>
+          //           <tr>
+          //             <td>
+          //               <div class="d-flex px-2 py-1">
+          //                 <div class="d-flex flex-column justify-content-center">
+          //                   <h6 class="mb-0 text-sm">${this.files[i].name}</h6>
+          //                 </div>
+          //               </div>
+          //             </td>
+          //           </tr>
+          //         </tbody>
+          //       </table>
+          //     </div>`
+        }
+        
+      }
+      
+    });
+
+    Dropzone.autoDiscover = false;
+    var drop = document.getElementById('dropzone')
+    var myDropzone = new Dropzone(drop, {
+      url: "/file/post",
+      addRemoveLinks: true
+
+    });
+
+      // $( 'exampleModal' )
+      // .on('hide', function() {
+      //     console.log('hide');
+      // })
+      // .on('hidden', function(){
+      //     console.log('hidden');
+      // })
+      // .on('show', function() {
+      //     console.log('show');
+      // })
+      // .on('shown', function(){
+      //     console.log('shown' )
+      // });
+    // $(document).on('hide.bs.modal','exampleModal', function () {
+    //    alert("Closed")
+    // });
+    // document.getElementById('exampleModal').on('hidden', function () {
+    //     // do something…
+    //     console.log("Closed")
+    // })
+
+    // document.getElementById('exampleModal').on('hidden.bs.modal', function () {
+    //   // do something…
+    //   console.log("Closed")
+    // })
+    function clrhome(){
+      document.getElementById('home1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('home2').style.backgroundColor = "#7c7d7d";
+      document.getElementById('home3').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('home4').style.fill = "#67748E";
+      document.getElementById('home5').style.fill = "#67748E";
+
+      document.getElementById('set1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('set2').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('set3').style.fill = "#67748E";
+      document.getElementById('set4').style.fill = "#67748E";
+
+      document.getElementById('log1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('log2').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('log3').style.fill = "#67748E";
+      document.getElementById('log4').style.fill = "#67748E";
+    };
+
+    document.getElementById('btnclose').onclick = function(){
+      close()
+    };
+
+    function close(){
+      document.getElementById('exampleModal').style.display = "none"
+      
+    };
+
+    
+
+
+  </script>
+
+{% endblock javascripts %}

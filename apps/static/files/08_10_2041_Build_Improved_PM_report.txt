@@ -1,0 +1,103 @@
+Lanes, Volumes, Timings	Build 2041 Conditions - Improved
+10: NC 904 (Seaside Road) & NC 179 (Old Georgetown Road)	Timing Plan: PM Peak Hour
+
+
+Lane Group                        		EBL	EBT	EBR	WBL	WBT	WBR	NBL	NBT	NBR	SBL	SBT	SBR
+Lane Configurations               		1	1>	0	1	1>	0	1	1>	0	1	1>	0
+Traffic Volume (vph)              		124	210	207	133	279	70	225	327	133	53	278	153
+Future Volume (vph)               		124	210	207	133	279	70	225	327	133	53	278	153
+Ideal Flow (vphpl)                		1900	1900	1900	1900	1900	1900	1900	1900	1900	1900	1900	1900
+Grade (%)                         			0%			0%			0%			-1%	
+Storage Length (ft)               		175		0	125		0	275		0	150		0
+Storage Lanes                     		1		0	1		0	1		0	1		0
+Taper Length (ft)                 		100			100			100			100		
+Lane Util. Factor                 		1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00
+Frt                               			0.925			0.970			0.957			0.947	
+Flt Protected                     		0.950			0.950			0.950			0.950		
+Satd. Flow (prot)                 		1770	1723	0	1770	1807	0	1770	1783	0	1778	1773	0
+Flt Permitted                     		0.950			0.950			0.950			0.950		
+Satd. Flow (perm)                 		1770	1723	0	1770	1807	0	1770	1783	0	1778	1773	0
+Right Turn on Red                 				No			No			No			No
+Satd. Flow (RTOR)                 													
+Link Speed (mph)                  			55			55			45			45	
+Link Distance (ft)                			6949			1547			1559			1280	
+Travel Time (s)                   			86.1			19.2			23.6			19.4	
+Peak Hour Factor                  		0.90	0.90	0.90	0.90	0.90	0.90	0.90	0.90	0.90	0.90	0.90	0.90
+Adj. Flow (vph)                   		138	233	230	148	310	78	250	363	148	59	309	170
+Shared Lane Traffic (%)           													
+Lane Group Flow (vph)             		138	463	0	148	388	0	250	511	0	59	479	0
+Enter Blocked Intersection        		No	No	No	No	No	No	No	No	No	No	No	No
+Lane Alignment                    		Left	Left	Right	Left	Left	Right	Left	Left	Right	Left	Left	Right
+Median Width(ft)                  			12			12			12			12	
+Link Offset(ft)                   			0			0			0			0	
+Crosswalk Width(ft)               			16			16			16			16	
+Two way Left Turn Lane            									Yes				
+Headway Factor                    		1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	1.00	0.99	0.99	0.99
+Turning Speed (mph)               		15		9	15		9	15		9	15		9
+Number of Detectors               		1	2		1	2		1	1		1	1	
+Detector Template                 													
+Leading Detector (ft)             		40	426		40	426		40	420		40	412	
+Trailing Detector (ft)            		0	0		0	0		0	414		0	406	
+Detector 1 Position(ft)           		0	0		0	0		0	414		0	406	
+Detector 1 Size(ft)               		40	40		40	40		40	6		40	6	
+Detector 1 Type                   		Cl+Ex	Cl+Ex		Cl+Ex	Cl+Ex		Cl+Ex	Cl+Ex		Cl+Ex	Cl+Ex	
+Detector 1 Channel                													
+Detector 1 Extend (s)             		0.0	2.0		0.0	2.0		0.0	0.0		0.0	0.0	
+Detector 1 Queue (s)              		0.0	0.0		0.0	0.0		0.0	0.0		0.0	0.0	
+Detector 1 Delay (s)              		15.0	5.0		15.0	5.0		15.0	3.0		15.0	3.0	
+Detector 2 Position(ft)           			420			420							
+Detector 2 Size(ft)               			6			6							
+Detector 2 Type                   			Cl+Ex			Cl+Ex							
+Detector 2 Channel                													
+Detector 2 Extend (s)             			3.0			3.0							
+Turn Type                         		Prot	NA		Prot	NA		Prot	NA		Prot	NA	
+Protected Phases                  		3	8		7	4		1	6		5	2	
+Permitted Phases                  													
+Detector Phase                    		3	8		7	4		1	6		5	2	
+Switch Phase                      													
+Minimum Initial (s)               		7.0	7.0		7.0	7.0		7.0	14.0		7.0	14.0	
+Minimum Split (s)                 		12.3	13.2		12.3	13.2		12.8	20.3		13.3	20.3	
+Total Split (s)                   		18.1	39.0		16.0	36.9		23.0	51.7		13.3	42.0	
+Total Split (%)                   		15.1%	32.5%		13.3%	30.8%		19.2%	43.1%		11.1%	35.0%	
+Yellow Time (s)                   		3.0	5.2		3.0	5.2		3.0	5.3		3.0	5.3	
+All-Red Time (s)                  		2.3	1.0		2.3	1.0		2.8	1.0		3.3	1.0	
+Lost Time Adjust (s)              		-0.3	-1.2		-0.3	-1.2		-0.8	-1.3		-1.3	-1.3	
+Total Lost Time (s)               		5.0	5.0		5.0	5.0		5.0	5.0		5.0	5.0	
+Lead/Lag                          		Lag	Lead		Lag	Lead		Lag	Lead		Lag	Lead	
+Lead-Lag Optimize?                		Yes	Yes		Yes	Yes		Yes	Yes		Yes	Yes	
+Recall Mode                       		None	None		None	None		None	Min		None	Min	
+Act Effct Green (s)               		14.5	34.0		11.0	30.5		17.9	42.4		12.0	33.7	
+Actuated g/C Ratio                		0.12	0.29		0.09	0.26		0.15	0.36		0.10	0.29	
+v/c Ratio                         		0.63	0.92		0.89	0.82		0.92	0.79		0.32	0.94	
+Control Delay                     		63.9	66.3		98.5	56.2		88.0	44.2		55.6	67.6	
+Queue Delay                       		0.0	0.0		0.0	0.0		0.0	0.0		0.0	0.0	
+Total Delay                       		63.9	66.3		98.5	56.2		88.0	44.2		55.6	67.6	
+LOS                               		E	E		F	E		F	D		E	E	
+Approach Delay                    			65.7			67.9			58.6			66.3	
+Approach LOS                      			E			E			E			E	
+Queue Length 50th (ft)            		105	352		116	282		194	372		42	351	
+Queue Length 95th (ft)            		#199	#559		#243	#433		#355	471		90	#539	
+Internal Link Dist (ft)           			6869			1467			1479			1200	
+Turn Bay Length (ft)              		175			125			275			150		
+Base Capacity (vph)               		220	503		167	495		273	718		183	563	
+Starvation Cap Reductn            		0	0		0	0		0	0		0	0	
+Spillback Cap Reductn             		0	0		0	0		0	0		0	0	
+Storage Cap Reductn               		0	0		0	0		0	0		0	0	
+Reduced v/c Ratio                 		0.63	0.92		0.89	0.78		0.92	0.71		0.32	0.85	
+
+Intersection Summary
+Area Type:                        	Other
+Cycle Length: 120
+Actuated Cycle Length: 116.6
+Natural Cycle: 100
+Control Type: Actuated-Uncoordinated
+Maximum v/c Ratio: 0.94
+Intersection Signal Delay: 64.1   					Intersection LOS: E
+Intersection Capacity Utilization 84.2%					ICU Level of Service E
+Analysis Period (min) 15
+#    95th percentile volume exceeds capacity, queue may be longer.
+     Queue shown is maximum after two cycles.
+
+
+Scenario 1 Stone Farms - Brunswick County, NC 5:00 pm 10/28/2021 Build 2041 Conditions - Improved	Synchro 11 Report
+RKA	Page 0

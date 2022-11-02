@@ -1,0 +1,292 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block body_class %} g-sidenav-show bg-gray-100 {% endblock %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; padding: 5px 10px">
+  <div class="col-12">
+    <div class="container py-3">
+      <div class="row">
+        <button
+          onclick="clrhome11()"
+          type="button"
+          class=" col-2 btn bg-gradient-success"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          >
+          Upload File
+        </button>
+        <div class="col-8">
+
+        </div>
+        <button
+          onclick="generate()"
+          type="button"
+          class="col-2 btn bg-gradient-success"
+          >
+          Generate Report
+        </button>
+      </div>
+      <div class="row">
+        <!--  -->
+        {% for file in files %}
+        <div class="col-sm">
+          <div class="card" style="margin-top: 5px; width: 18rem">
+            
+          </div>
+        </div>
+        {% endfor %}
+        <!--  -->
+
+        <div class="row my-2">
+          <div class="col-12">
+            <div class="card">
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">File Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Extension</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">file created</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Download</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for file,e,date in ext %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{file.filetitle}}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge badge-dot me-4">
+                          <i class="bg-dark"></i>
+                          <span class="text-dark text-xs">{{e}}</span>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge badge-dot me-4">
+                          <span  class="text-center text-dark text-xs">{{date}}</span>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <a href="{{file.file.url}}" download="{file.file.url}" class="btn bg-gradient-success">Download File </a>
+                      </td>
+                      <td class="px-2 py-1 align-middle text-center">
+                        
+                        <a href="{% url 'file' file.id %}" class="btn btn-outline-danger delete-data" type="button" data-id="{{ post.pk }}" title="Delete">
+                            <i class="fa fa-1x fa-trash"></i>
+                        </a>
+                    </td>
+                    </tr>
+                    {% endfor %}
+
+                    {% for n,e in dirfiles %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{n}}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge badge-dot me-4">
+                          <i class="bg-info"></i>
+                          <span id="ext" class="text-dark text-xs">{{e}}</span>
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge badge-dot me-4">
+                          
+                        </span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <a href="{{ n }}" class="btn bg-gradient-success">Download File </a>
+                      </td>
+                      
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <!-- Button trigger modal -->
+    
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload File</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'folder' folderid %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label"
+                  >File Name</label
+                >
+                <div class="fallback">
+                  <input name="file" type="file" id="actual-btn" hidden multiple required/>
+                  
+                  <label class="btn bg-gradient-primary m-0 ms-2" for="actual-btn">Choose File</label>
+                  <!-- name of file chosen -->
+                  <span id="file-chosen">No file chosen</span>
+                </div>
+                
+                <button id="submitbtn" class="btn btn-outline-success my-3">
+                  Upload File
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %} 
+<script src="/static/assets/js/plugins/choices.min.js"></script>
+  <script src="/static/assets/js/plugins/quill.min.js"></script>
+  <script src="/static/assets/js/plugins/flatpickr.min.js"></script>
+  <script src="/static/assets/js/plugins/dropzone.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+
+  const actualBtn = document.getElementById('actual-btn');
+  const home = document.getElementById('home');
+  const homeico = document.getElementById('homeico');
+
+  $("#exampleModal").on('hide.bs.modal', function(){
+        // alert('The modal is about to be hidden.');
+        var success_url = "{% url 'index' %}"
+        // Redirect to URL
+        window.location.replace(success_url)
+      });
+
+  home.onclick = function(){
+    clrhome1()
+  }
+
+  const fileChosen = document.getElementById('file-chosen');
+
+  actualBtn.addEventListener('change', function(){
+    var valam = parseInt(0)
+    var valpm = parseInt(0)
+    for (var i = 0; i < this.files.length; ++i) {
+      //console.log(this.files[i].name)
+
+      if (this.files[i].name.includes("AM_report")){
+        //console.log("YES")
+        valam++
+      }
+
+      if (this.files[i].name.includes("PM_report")){
+        //console.log("YES")
+        valpm++
+      }
+      //alert(this.files[i].name.substring("AM"))
+      var allowedExtensions =
+                  /(\.txt)$/i;
+
+      if (!allowedExtensions.exec(this.files[i].name)) {
+              alert('Invalid file type');
+              document.getElementById('submitbtn').style.display = "none"
+              fileInput.value = '';
+              return false;
+          }
+      else{
+        document.getElementById('submitbtn').style.display = "block"
+      }
+      //children += '<li>' + input.files.item(i).name + '</li>';
+    }
+    //console.log(valam)
+    //console.log(valpm)
+
+    if(this.files.length = 1){
+      fileChosen.textContent = this.files[0].name
+    }
+    if(this.files.length > 1){
+      fileChosen.textContent = this.files.length +" " + "files selected"
+    }
+    
+  });
+  
+  function generate(){
+    var success_url = "{% url 'index' %}"
+    // Redirect to URL
+    window.location.replace(success_url)
+  }
+  
+  function clrhome11(){
+      document.getElementById('home1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('home2').style.backgroundColor = "#7c7d7d";
+      document.getElementById('home3').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('home4').style.fill = "#67748E";
+      document.getElementById('home5').style.fill = "#67748E";
+
+      document.getElementById('set1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('set2').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('set3').style.fill = "#67748E";
+      document.getElementById('set4').style.fill = "#67748E";
+
+      document.getElementById('log1').style.backgroundColor = "#7c7d7d";
+      document.getElementById('log2').style.backgroundImage = "linear-gradient(310deg, #7c7d7d 0%, #7c7d7d 100%)";
+      document.getElementById('log3').style.fill = "#67748E";
+      document.getElementById('log4').style.fill = "#67748E";
+    };
+  
+
+  document.getElementById('btnclose').onclick = function(){
+    close()
+  }
+
+  function close(){
+    document.getElementById('exampleModal').style.display = "none"
+    
+  }
+
+  function clrhome1(){
+    homeico.style.backgroundImage = "linear-gradient(310deg, #82d616 0%, #82d616 100%)";
+    
+  }
+
+
+</script>
+{% endblock javascripts %}
