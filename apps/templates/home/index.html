@@ -49,7 +49,7 @@
       <div id="pcoded-inner-navbar" class=" row">
         <!--  -->
         {% for i in folder %}
-        <div style="margin-left: 10px;" class="col-sm-4">
+        <div style="margin-left: 10px;" class="col-sm-3">
           <div class="card" style="margin-top: 5px; width: 16rem; height: 10rem;">
             <div class="card-body">
               <h5 class="card-title">{{i.foldername}}</h5>
@@ -158,7 +158,7 @@
     $("#m-search").on("keyup",function(){
       var e=$(this).val().toLowerCase(),s=$(this).val().length;
       console.log(e)
-      $("#pcoded-inner-navbar > .col-sm-4 > .card > .card-body > .card-title").each(function(){
+      $("#pcoded-inner-navbar > .col-sm-3 > .card > .card-body > .card-title").each(function(){
         // console.log(this)
         var d=$(this).text();
         var s=$(this).text().toLowerCase();
