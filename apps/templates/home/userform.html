@@ -1,0 +1,101 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Settings {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+  .navbar-vertical .navbar-nav > .nav-item .nav-link.active .icon {
+    background-image: linear-gradient(310deg, #82d616 0%, #82d616 100%);
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block body_class %} g-sidenav-show bg-gray-100 {% endblock %}
+
+{% block content %}
+
+  
+
+  <div class="container-fluid my-3 py-3">
+  
+    <div class="row mb-5">
+      
+      <div class="col-lg-9 mt-lg-0 mt-4">
+        <!-- Card Profile -->
+        
+        <!-- Card Basic Info -->
+        <div class="card mt-1" id="basic-info">
+          <div class="card-header">
+            <h5>Create User</h5>
+          </div>
+          <div class="card-body pt-0">
+            <form action="{% url 'userform' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+            <div class="row">
+              <div class="col-6">
+                <label class="form-label">Username</label>
+                <div class="input-group">
+                  <input id="firstName" name="firstName" class="form-control" type="text" placeholder="Username" required="required">
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="row">
+              <div class="col-6">
+                <label class="form-label mt-4">Email</label>
+                <div class="input-group">
+                  <input id="email" name="email" class="form-control" type="email" placeholder="email" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="form-label mt-4">Confirmation Email</label>
+                <div class="input-group">
+                  <input id="confirmation" name="confirmation" class="form-control" type="email" placeholder="Confirm email" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <label class="form-label mt-4">Password</label>
+                <div class="input-group">
+                  <input id="email" name="password" class="form-control" type="password" placeholder="password" required>
+                </div>
+              </div>
+              <div class="col-6">
+                <label class="form-label mt-4">Confirmation Email</label>
+                <div class="input-group">
+                  <input id="confirmation" name="confirpass" class="form-control" type="password" placeholder="Confirm password" required>
+                </div>
+              </div>
+            </div>
+            <button style="margin-top: 15px; float: right;" type="submit" name="button" class="btn bg-gradient-success">Create</button>
+            </form>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script>
+  const actualBtn = document.getElementById('actual-btn1');
+  const fileChosen = document.getElementById('file-chosen1');
+
+  actualBtn.addEventListener('change', function(){
+    for (var i = 0; i < this.files.length; ++i){
+      fileChosen.textContent = this.files[0].name
+    }  
+  })
+
+</script>
+{% endblock javascripts %}

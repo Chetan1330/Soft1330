@@ -71,7 +71,8 @@
       </div>
       <div class="col-lg-9 mt-lg-0 mt-4">
         <!-- Card Profile -->
-        
+        <form action="{% url 'image' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
         <!-- Card Basic Info -->
         <div class="card mt-1" id="basic-info">
           <div class="card-header">
@@ -82,13 +83,13 @@
               <div class="col-6">
                 <label class="form-label">First Name</label>
                 <div class="input-group">
-                  <input id="firstName" name="firstName" class="form-control" type="text" placeholder="Alec" required="required">
+                  <input id="firstName" name="firstName" class="form-control" type="text" placeholder="Alec" value="{{firstName}}" required="required">
                 </div>
               </div>
               <div class="col-6">
                 <label class="form-label">Last Name</label>
                 <div class="input-group">
-                  <input id="lastName" name="lastName" class="form-control" type="text" placeholder="Thompson" required="required">
+                  <input id="lastName" name="lastName" class="form-control" type="text" placeholder="Thompson" value="{{lastName}}" required="required">
                 </div>
               </div>
             </div>
@@ -104,15 +105,15 @@
                 <div class="row">
                   <div class="col-sm-5 col-5">
                     <label class="form-label mt-4">Birth Date</label>
-                    <select class="form-control" name="choices-month" id="choices-month"></select>
+                    <input value="{{choicesmonth}}" type="number" class="form-control" name="choices-month" id="choices-month"></input>
                   </div>
                   <div class="col-sm-4 col-3">
                     <label class="form-label mt-4">&nbsp;</label>
-                    <select class="form-control" name="choices-day" id="choices-day"></select>
+                    <input value="{{choicesday}}" type="number" class="form-control" name="choices-day" id="choices-day"></input>
                   </div>
                   <div class="col-sm-3 col-4">
                     <label class="form-label mt-4">&nbsp;</label>
-                    <select class="form-control" name="choices-year" id="choices-year"></select>
+                    <input value="{{choicesyear}}" type="number" class="form-control" name="choices-year" id="choices-year"></input>
                   </div>
                 </div>
               </div>
@@ -121,13 +122,13 @@
               <div class="col-6">
                 <label class="form-label mt-4">Email</label>
                 <div class="input-group">
-                  <input id="email" name="email" class="form-control" type="email" placeholder="example@email.com">
+                  <input value="{{email}}" id="email" name="email" class="form-control" type="email" placeholder="example@email.com">
                 </div>
               </div>
               <div class="col-6">
                 <label class="form-label mt-4">Confirmation Email</label>
                 <div class="input-group">
-                  <input id="confirmation" name="confirmation" class="form-control" type="email" placeholder="example@email.com">
+                  <input value="{{email}}" id="confirmation" name="confirmation" class="form-control" type="email" placeholder="example@email.com">
                 </div>
               </div>
             </div>
@@ -135,13 +136,13 @@
               <div class="col-6">
                 <label class="form-label mt-4">Your location</label>
                 <div class="input-group">
-                  <input id="location" name="location" class="form-control" type="text" placeholder="Sydney, A">
+                  <input value="{{location}}" id="location" name="location" class="form-control" type="text" placeholder="Sydney, A">
                 </div>
               </div>
               <div class="col-6">
                 <label class="form-label mt-4">Phone Number</label>
                 <div class="input-group">
-                  <input id="phone" name="phone" class="form-control" type="number" placeholder="+40 735 631 620">
+                  <input value="{{phone}}" id="phone" name="phone" class="form-control" type="number" placeholder="+40 735 631 620">
                 </div>
               </div>
             </div>
@@ -156,14 +157,13 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label mt-4">Skills</label>
-                <input class="form-control" id="choices-skills" type="text" value="vuejs, angular, react" placeholder="Enter something" />
+                <input value="{{skill}}" name="skill" class="form-control" id="choices-skills" type="text" value="vuejs, angular, react" placeholder="Enter something" />
               </div>
             </div>
             <div class="row">
               <div class="col-md-6">
                 <label class="form-label mt-4">Upload Image</label>
-                <form action="{% url 'image' %}" method="POST" enctype="multipart/form-data">
-                  {% csrf_token %}
+                
                 <div class="fallback">
                   <input name="imgfile" type="file" id="actual-btn1" hidden required/>
                   
@@ -173,12 +173,13 @@
                   <hr>
                 </div>
                 <button style="float: right;" type="submit" name="button" class="btn bg-gradient-success">Save</button>
-              </form>
+              
               </div>
 
             </div>
           </div>
         </div>
+      </form>
         <!-- Card Change Password -->
         <div class="card mt-4" id="password">
           <div class="card-header">

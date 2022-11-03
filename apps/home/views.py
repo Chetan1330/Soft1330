@@ -27,33 +27,43 @@ from wsgiref.util import FileWrapper
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import Folder,File,Img,upload
+from .models import Folder,File,Img,upload,userprofile
 @login_required(login_url="/login/")
 def index(request):
-    print("User id:",request.user.id)
+    print("User id:",request.user.email)
     u = User.objects.get(id=request.user.id)
+    usrinfo = userprofile.objects.filter(usr=request.user.id)
+    # for val in usrinfo:
+    #     val.delete()
     print("Password is:",u.password)
+    # usrinfo = userprofile.objects.get(id=request.user.id)
+    # print("Firstname is:",usrinfo.firstName)
     folder = Folder.objects.filter(folderuser=request.user)
     image = Img.objects.filter(filetitle=request.user.id)
     # print("Media root:",file_path11)
     imgurl = []
-    for img11 in image:
-        imgurl.append(img11.file.url.split('/mediafiles')[1])
+    if image:
+        for img11 in image:
+            imgurl.append(img11.file.url.split('/mediafiles')[1])
         # print("Image is:",img11.file.url.split('/mediafiles')[1])
-    # print("IMGURL:",imgurl[0])
-    print("IMGURL",imgurl[0])
-    # media_root = getattr(settings, 'MEDIA_ROOT', None)
-    # if image:
-    #     image.delete()
-    # print(media_root)
-    context = {'folder':folder,'segment':'index','image':"static" + imgurl[0]}
-    #return render(request,'home/index.html',context)
-    #context = {'segment': 'index'}
-     
-    print(datetime.datetime.now().strftime ("%I:%M%p on %B %d, %Y"))
-    html_template = loader.get_template('home/index.html')
-    return HttpResponse(html_template.render(context, request))
-
+        # print("IMGURL:",imgurl[0])
+        # print("IMGURL",imgurl[0])
+        # media_root = getattr(settings, 'MEDIA_ROOT', None)
+        # if image:
+        #     image.delete()
+        # print(media_root)
+        context = {'folder':folder,'segment':'index','image':"static" + imgurl[0]}
+        #return render(request,'home/index.html',context)
+        #context = {'segment': 'index'}
+        
+        print(datetime.datetime.now().strftime ("%I:%M%p on %B %d, %Y"))
+        html_template = loader.get_template('home/index.html')
+        return HttpResponse(html_template.render(context, request))
+    
+    else:
+        context = {'folder':folder,'segment':'index'}
+        html_template = loader.get_template('home/index.html')
+        return HttpResponse(html_template.render(context, request))
 
 # Folder with files in it
 def folder(request,folderid):
@@ -72,6 +82,12 @@ def folder(request,folderid):
     #     for x in os.listdir(file_path11):
     #         print(x)
 
+    image = Img.objects.filter(filetitle=request.user.id)
+    # print("Media root:",file_path11)
+    imgurl = []
+    for img11 in image:
+        imgurl.append(img11.file.url.split('/mediafiles')[1])
+
     print(len(files),len(lstdir))
     ext = []
     for i in range(len(files)):
@@ -85,7 +101,7 @@ def folder(request,folderid):
         dirfiles.append([lstdir[i],lstdir[i].split('.')[1]])
     print(dirfiles)
     print(ext)
-    context = {'folderid':folderid,'files':files,'ext':ext,'dirfiles':dirfiles}
+    context = {'folderid':folderid,'files':files,'ext':ext,'dirfiles':dirfiles,'image':"static" + imgurl[0]}
     # file_user = request.FILES.get('file')
     # for f in file_user:
     #     print("Files:",f)
@@ -125,7 +141,8 @@ def folder(request,folderid):
             tpl.render(context)
             tpl.save(file_path11 + "/" + "%s.docx" %str("Output"))
                 # print("File name:",str(f.name).split('.')[0].replace(" ", "_"))
-        return redirect("folder",folderid=int(folderid))
+        # return redirect("folder",folderid=int(folderid))'image':"static" + imgurl[0]
+        return redirect(reverse('folder',folderid=int(folderid), kwargs={ 'image':"static" + imgurl[0] }))
     return render(request,'home/folder.html',context)
 
 # Delete Folder with files in it
@@ -160,12 +177,146 @@ def image(request):
     # files = File.objects.filter(folder=folder_user)
     # context = {'folderid':folderid,'files':files}
     image = Img.objects.filter(filetitle=request.user.id)
+    imgurl = []
+    if image:
+        for img11 in image:
+            imgurl.append(img11.file.url.split('/mediafiles')[1])
+    # usrinfo = userprofile.objects.get(id=request.user.id)
+    usrinfo = userprofile.objects.filter(usr=request.user.id)
+    # print("Firstname is:",usrinfo.firstName)
+    context = {'segment':'account-settings.html'}
     if image:
         image.delete()
+    if usrinfo:
+        usrinfo.delete()
     if request.method == 'POST':
+
+        usr = request.POST  
+        firstName = str(usr.dict()['firstName'])
+        print("Firstname is:",firstName)
+        lastName = str(usr.dict()['lastName'])
+        choicesgender = str(usr.dict()['choices-gender'])
+        choicesmonth = str(usr.dict()['choices-month'])
+        
+        choicesday = str(usr.dict()['choices-day'])
+        choicesyear = str(usr.dict()['choices-year'])
+        email = str(usr.dict()['email'])
+        confirmation = str(usr.dict()['confirmation'])
+        location = str(usr.dict()['location'])
+        phone = str(usr.dict()['phone'])
+        choiceslanguage = str(usr.dict()['choices-language'])
+        skill = str(usr.dict()['skill'])
+        print("Skill is:",skill)
+
         file_user = request.FILES.get('imgfile')
         fileadd = Img.objects.create(filetitle=request.user.id,file=file_user)
-    return redirect('/account-settings.html')
+        if usrinfo:
+            userprofile.objects.update(usr=str(request.user.id),firstName=firstName,lastName=lastName,choicesgender=choicesgender,
+                        choicesmonth=choicesmonth,choicesday=choicesday,choicesyear=choicesyear,email=email,
+                        confirmation=confirmation,location=location,phone=phone,choiceslanguage=choiceslanguage,
+                        skill=skill)
+            context['firstName']     = firstName
+            context['lastName']     = lastName
+            context['choicesgender']     = choicesgender
+            context['choicesmonth']     = choicesmonth
+            context['choicesday']     = choicesday
+            context['choicesyear']     = choicesyear
+            context['email']     = email
+            context['location']     = location
+            context['phone']     = phone
+            context['choiceslanguage']     = choiceslanguage
+            context['skill']     = skill
+
+
+            image = Img.objects.filter(filetitle=request.user.id)
+            imgurl = []
+            if image:
+                for img11 in image:
+                    imgurl.append(img11.file.url.split('/mediafiles')[1])
+            context['image'] = "static" + imgurl[0]
+        
+            # context['segment']     = segment
+            # context['active_menu'] = active_menu
+            return render(request,"home/account-settings.html",context)
+            
+        else:
+            userprofile.objects.create(usr=str(request.user.id),firstName=firstName,lastName=lastName,choicesgender=choicesgender,
+                        choicesmonth=choicesmonth,choicesday=choicesday,choicesyear=choicesyear,email=email,
+                        confirmation=confirmation,location=location,phone=phone,choiceslanguage=choiceslanguage,
+                        skill=skill)
+            context['firstName']     = firstName
+            context['lastName']     = lastName
+            context['choicesgender']     = choicesgender
+            context['choicesmonth']     = choicesmonth
+            context['choicesday']     = choicesday
+            context['choicesyear']     = choicesyear
+            context['email']     = email
+            context['location']     = location
+            context['phone']     = phone
+            context['choiceslanguage']     = choiceslanguage
+            context['skill']     = skill
+
+            image = Img.objects.filter(filetitle=request.user.id)
+            imgurl = []
+            if image:
+                for img11 in image:
+                    imgurl.append(img11.file.url.split('/mediafiles')[1])
+            context['image'] = "static" + imgurl[0]
+        
+            # context['segment']     = segment
+            # context['active_menu'] = active_menu
+            return render(request,"home/account-settings.html",context)
+            
+
+        context['firstName']     = firstName
+        context['lastName']     = lastName
+        context['choicesgender']     = choicesgender
+        context['choicesmonth']     = choicesmonth
+        context['choicesday']     = choicesday
+        context['choicesyear']     = choicesyear
+        context['email']     = email
+        context['location']     = location
+        context['phone']     = phone
+        context['choiceslanguage']     = choiceslanguage
+        context['skill']     = skill
+        
+        image = Img.objects.filter(filetitle=request.user.id)
+        imgurl = []
+        if image:
+            for img11 in image:
+                imgurl.append(img11.file.url.split('/mediafiles')[1])
+        context['image'] = "static" + imgurl[0]
+    
+        # context['segment']     = segment
+        # context['active_menu'] = active_menu
+        return render(request,"home/account-settings.html",context)
+    # return redirect('/account-settings.html')
+
+def userform(request):
+    if request.method == 'POST':
+        usr = request.POST           
+        usrname = usr.dict()['firstName']
+        # lastName = usr.dict()['lastName']
+        # choicesgender = usr.dict()['choices-gender']
+        # choicesmonth = usr.dict()['choices-month']
+        # choicesday = usr.dict()['choices-day']
+        # choicesyear = usr.dict()['choices-year']
+        email = usr.dict()['email']
+        confirmation = usr.dict()['confirmation']
+        password11 = usr.dict()['password']
+        confirmpass = usr.dict()['confirpass']
+        # location = usr.dict()['location']
+        # phone = usr.dict()['phone']
+        # choiceslanguage = usr.dict()['choices-language']
+        # skill = usr.dict()['skill']
+        
+        u1 = User.objects.create(username=usrname,email=email)
+        u1.set_password(password11)
+        # print("Firstname is:",choicesmonth)
+        # is_private = 'is_private' in request.POST
+        # print(is_private)
+        return redirect('/userform.html')
+
 
 # Add Folder View
 def addfolder(request):
@@ -236,12 +387,29 @@ def addfolder(request):
 
 @login_required(login_url="/login/")
 def pages(request):
-
+    context = {}
     image = Img.objects.filter(filetitle=request.user.id)
-    for img11 in image:
-        print("Image is:",img11.file.url.split('/mediafiles')[1])
+    imgurl = []
+    if image:
+        for img11 in image:
+            imgurl.append(img11.file.url.split('/mediafiles')[1])
 
-    context = {'image':"static" + img11.file.url.split('/mediafiles')[1]}
+            # context = {'image':"static" + imgurl[0],}
+            # segment, active_menu = get_segment( request )
+            # context
+            # context['segment']     = segment
+            # context['active_menu'] = active_menu
+
+    usrinfo = userprofile.objects.filter(usr=request.user.id)
+    if usrinfo:
+        print("TRue")
+    else:
+        print("False")
+    # frmval = []
+    # for val in usrinfo:
+    #     frmval.append
+    #     print("First name:",val.firstName[0])
+    print("First name:",usrinfo)
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
@@ -279,16 +447,104 @@ def pages(request):
             return HttpResponseRedirect(reverse('admin:index'))
  	
         if load_template == 'account-settings.html':
+            
+            # usrinfo = userprofile.objects.get(id=request.user.id)
+            # # userinfo = userprofile.objects.filter(user=request.user.email)
+            # # usrinfo = userprofile.objects.get(id=request.user.id)
+            # # usrinfo = userprofile.objects.get(id=request.user.id)
+                
+            # # print(userprofile.objects.get(id=request.user.id))
+            if usrinfo:
+                uinfo = []
+                for u in usrinfo:
+                    print(u.firstName)
+
+                    context['firstName']     = u.firstName
+                    context['lastName']     = u.lastName
+                    context['choicesgender']     = u.choicesgender
+                    context['choicesmonth']     = u.choicesmonth
+                    context['choicesday']     = u.choicesday
+                    context['choicesyear']     = u.choicesyear
+                    context['email']     = u.email
+                    context['location']     = u.location
+                    context['phone']     = u.phone
+                    context['choiceslanguage']     = u.choiceslanguage
+                    context['skill']     = u.skill
+
+                    context['image'] = "static" + imgurl[0]
+                    segment, active_menu = get_segment( request )
+        
+                    context['segment']     = segment
+                    context['active_menu'] = active_menu
+                    
+                    
+                    html_template = loader.get_template('home/' + load_template)
+                    return HttpResponse(html_template.render(context, request))
+                    # uinfo.append(img11.file.url.split('/mediafiles')[1])
+            #     print("First name:",usrinfo.firstName)
+            #     print("Firstname is:",firstName)
+            #     # if usrinfo:
+            #     firstName = usrinfo.firstName
+            #     lastName = usrinfo.lastName
+            #     choicesgender = usrinfo.choicesgender
+            #     choicesmonth = usrinfo.choicesmonth
+            #     choicesday = usrinfo.choicesday
+            #     choicesyear = usrinfo.choicesyear
+            #     email = usrinfo.email
+            #     confirmation = usrinfo.confirmation
+            #     location = usrinfo.location
+            #     phone = usrinfo.phone
+            #     choiceslanguage = usrinfo.choiceslanguage
+            #     skill = usrinfo.skill
+
+
+                    
+            # print("Username is:",userinfo.get('firstName'))
+                # html_template = loader.get_template('home/' + load_template)
+                # return HttpResponse(html_template.render(context, request))
+
             if request.method == "POST":
-                print("account setting")
+                # print("account setting")
+                # usr = request.POST  
+                # usermail = request.user.email       
+                # firstName = str(usr.dict()['firstName'])
+                # lastName = str(usr.dict()['lastName'])
+                # choicesgender = str(usr.dict()['choices-gender'])
+                # choicesmonth = str(usr.dict()['choices-month'])
+                # choicesday = str(usr.dict()['choices-day'])
+                # choicesyear = str(usr.dict()['choices-year'])
+                # email = str(usr.dict()['email'])
+                # confirmation = str(usr.dict()['confirmation'])
+                # location = str(usr.dict()['location'])
+                # phone = str(usr.dict()['phone'])
+                # choiceslanguage = str(usr.dict()['choices-language'])
+                # skill = str(usr.dict()['skill'])
                 curpass = request.POST['curpass']
                 newpass = request.POST['newpass']
                 newpass1 = request.POST['newpass1']
                 print("CurrrPass is:",curpass)
+                
+                # if firstName:
+                #     usrinfo = userprofile.objects.get(id=request.user.id)
+                #     if usrinfo:
+                #         userprofile.objects.create(user=usermail,firstName=firstName,lastName=lastName,choicesgender=choicesgender,
+                #         choicesmonth=choicesmonth,choicesday=choicesday,choicesyear=choicesyear,email=email,
+                #         confirmation=confirmation,location=location,phone=phone,choiceslanguage=choiceslanguage,
+                #         skill=skill)
+                #     userprofile.objects.create(user=usermail,firstName=firstName,lastName=lastName,choicesgender=choicesgender,
+                #     choicesmonth=choicesmonth,choicesday=choicesday,choicesyear=choicesyear,email=email,
+                #     confirmation=confirmation,location=location,phone=phone,choiceslanguage=choiceslanguage,
+                #     skill=skill)
 
+                
                 u = User.objects.get(id=request.user.id)
                 if str(u.check_password(curpass)) == "False":
-                    return render(request,"home/account-settings.html",{"msg":"False"})
+                    segment, active_menu = get_segment( request )
+                    context = {"msg":"False",'image':"static" + imgurl[0],'segment':"account-setting.html"}
+                        # context = {}
+                    context['segment']     = segment
+                    context['active_menu'] = active_menu
+                    return render(request,"home/account-settings.html",context)
                 if str(u.check_password(curpass)) == "True":
                     if str(newpass) == str(newpass1):
                         u.set_password(newpass)
@@ -296,8 +552,21 @@ def pages(request):
                         return redirect("/account-settings.html")
 
                     if str(newpass) != str(newpass1):
-                        return render(request,"home/account-settings.html",{"msg":"mismatch"})
-
+                        segment, active_menu = get_segment( request )
+                        context = {"msg":"mismatch",'image':"static" + imgurl[0],'segment':"account-setting.html"}
+                        # context = {}
+                        context['segment']     = segment
+                        context['active_menu'] = active_menu
+                        return render(request,"home/account-settings.html",context)
+            
+            segment, active_menu = get_segment( request )
+            # context = {"firstName":firstName,"lastName":lastName,"choicesgender":choicesgender,"choicesmonth":choicesmonth,
+            #             "choicesday":choicesday,"choicesyear":choicesyear,"email":email,"location":location,
+            #             "phone":phone,"choiceslanguage":choiceslanguage,"skill":skill,'segment':"account-setting.html"}
+            # context = {}
+            context['segment']     = segment
+            context['active_menu'] = active_menu
+            return render(request,"home/account-settings.html",context)
 
         segment, active_menu = get_segment( request )
         

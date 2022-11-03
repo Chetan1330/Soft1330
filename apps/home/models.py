@@ -18,6 +18,23 @@ class File(models.Model):
 class upload(models.Model):
     upload=models.FileField(upload_to="media",null = True)
 
+class userprofile(models.Model):
+    usr = models.CharField(max_length=50,null=True)
+    firstName = models.CharField(max_length=50,null=True)
+    lastName = models.CharField(max_length=50,null=True)
+    choicesgender = models.CharField(max_length=50,null=True)
+    choicesmonth = models.CharField(max_length=50,null=True)
+    choicesday = models.CharField(max_length=50,null=True)
+    choicesyear = models.CharField(max_length=50,null=True)
+    email = models.CharField(max_length=50,null=True)
+    confirmation = models.CharField(max_length=50,null=True)
+    location = models.CharField(max_length=50,null=True)
+    phone = models.CharField(max_length=50,null=True)
+    choiceslanguage = models.CharField(max_length=50,null=True)
+    skill = models.CharField(max_length=50,null=True)
+
 class Img(models.Model):
     filetitle = models.CharField(max_length=50)
     file = models.FileField(upload_to="Img/")
+    
+    
