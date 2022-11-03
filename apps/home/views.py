@@ -478,8 +478,8 @@ def pages(request):
                     context['active_menu'] = active_menu
                     
                     
-                    html_template = loader.get_template('home/' + load_template)
-                    return HttpResponse(html_template.render(context, request))
+                    # html_template = loader.get_template('home/' + load_template)
+                    # return HttpResponse(html_template.render(context, request))
                     # uinfo.append(img11.file.url.split('/mediafiles')[1])
             #     print("First name:",usrinfo.firstName)
             #     print("Firstname is:",firstName)
@@ -540,8 +540,8 @@ def pages(request):
                 u = User.objects.get(id=request.user.id)
                 if str(u.check_password(curpass)) == "False":
                     segment, active_menu = get_segment( request )
-                    context = {"msg":"False",'image':"static" + imgurl[0],'segment':"account-setting.html"}
-                        # context = {}
+                    context['msg'] = "False"
+                    context['image'] = "static" + imgurl[0]
                     context['segment']     = segment
                     context['active_menu'] = active_menu
                     return render(request,"home/account-settings.html",context)
@@ -549,24 +549,31 @@ def pages(request):
                     if str(newpass) == str(newpass1):
                         u.set_password(newpass)
                         u.save()
-                        return redirect("/account-settings.html")
+                        segment, active_menu = get_segment( request )
+                        context['image'] = "static" + imgurl[0]
+                        context['segment']     = segment
+                        context['active_menu'] = active_menu
+                        return render(request,"home/account-settings.html",context)
+                        # return redirect("/account-settings.html")
 
                     if str(newpass) != str(newpass1):
                         segment, active_menu = get_segment( request )
-                        context = {"msg":"mismatch",'image':"static" + imgurl[0],'segment':"account-setting.html"}
-                        # context = {}
+                        context['msg'] = "mismatch"
+                        context['image'] = "static" + imgurl[0]
                         context['segment']     = segment
                         context['active_menu'] = active_menu
                         return render(request,"home/account-settings.html",context)
             
-            segment, active_menu = get_segment( request )
-            # context = {"firstName":firstName,"lastName":lastName,"choicesgender":choicesgender,"choicesmonth":choicesmonth,
-            #             "choicesday":choicesday,"choicesyear":choicesyear,"email":email,"location":location,
-            #             "phone":phone,"choiceslanguage":choiceslanguage,"skill":skill,'segment':"account-setting.html"}
-            # context = {}
-            context['segment']     = segment
-            context['active_menu'] = active_menu
-            return render(request,"home/account-settings.html",context)
+            html_template = loader.get_template('home/' + load_template)
+            return HttpResponse(html_template.render(context, request))
+            # segment, active_menu = get_segment( request )
+            # # context = {"firstName":firstName,"lastName":lastName,"choicesgender":choicesgender,"choicesmonth":choicesmonth,
+            # #             "choicesday":choicesday,"choicesyear":choicesyear,"email":email,"location":location,
+            # #             "phone":phone,"choiceslanguage":choiceslanguage,"skill":skill,'segment':"account-setting.html"}
+            # # context = {}
+            # context['segment']     = segment
+            # context['active_menu'] = active_menu
+            # return render(request,"home/account-settings.html",context)
 
         segment, active_menu = get_segment( request )
         
