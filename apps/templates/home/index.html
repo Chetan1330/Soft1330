@@ -210,12 +210,12 @@
 
         if (!allowedExtensions.exec(this.files[i].name)) {
                 alert('Invalid file type');
-                document.getElementById('submitbtn').style.display = "none"
+                document.getElementById('submitbtn').disabled = true;
                 fileInput.value = '';
                 return false;
             }
         else{
-          document.getElementById('submitbtn').style.display = "block"
+          document.getElementById('submitbtn').disabled = false;
         }
         //children += '<li>' + input.files.item(i).name + '</li>';
       }
@@ -226,6 +226,7 @@
         document.getElementById('submitbtn').disabled = false;
       }
       if (valam != valpm){
+        alert("AM and PM files should be equal")
         document.getElementById('submitbtn').disabled = true;
       }
 
